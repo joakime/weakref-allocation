@@ -116,11 +116,15 @@ public class WeakReference<T> extends Reference<T> {
         
         public boolean toggleEnabled();
         
+        public long getTotalReferences();
+        
         public int getStackdumpInterval();
         
         public void setStackdumpInterval(int interval);
         
         public void reset();
+        
+        public long getCount(String name);
 
         public String dumpByName();
         
@@ -131,7 +135,8 @@ public class WeakReference<T> extends Reference<T> {
     {
         private Map<String, Long> weaks = new HashMap<>();
         private boolean enabled = true;
-        private int stackdumpInterval = 100;
+        private int stackdumpInterval = Integer.getInteger("java.lang.ref.WeakReference.stackdumpInterval",1000);
+        private long totalReferences = 0;
 
         public void record(Object referent)
         {
@@ -143,6 +148,7 @@ public class WeakReference<T> extends Reference<T> {
             synchronized (this)
             {
                 String key = referent == null ? "null" : referent.getClass().getName();
+                totalReferences++;
                 Long count = weaks.get(key);
                 Long value = count == null ? 1L : count + 1;
                 weaks.put(key,value);
@@ -152,6 +158,11 @@ public class WeakReference<T> extends Reference<T> {
                     Thread.dumpStack();
                 }
             }
+        }
+        
+        public long getTotalReferences()
+        {
+            return totalReferences;
         }
         
         @Override
@@ -198,6 +209,21 @@ public class WeakReference<T> extends Reference<T> {
             synchronized (this)
             {
                 weaks.clear();
+                totalReferences = 0;
+            }
+        }
+        
+        @Override
+        public long getCount(String name)
+        {
+            synchronized (weaks)
+            {
+                Long count = weaks.get(name);
+                if (count == null)
+                {
+                    return 0;
+                }
+                return count.longValue();
             }
         }
 
@@ -205,7 +231,7 @@ public class WeakReference<T> extends Reference<T> {
         public String dumpByName()
         {
             List<Map.Entry<String, Long>> entries = new ArrayList<>();
-            synchronized (this)
+            synchronized (weaks)
             {
                 entries.addAll(weaks.entrySet());
             }
@@ -262,8 +288,7 @@ public class WeakReference<T> extends Reference<T> {
             {
                 return -1;
             }
-            int diff = l2.intValue() - l1.intValue();
-            return diff;
+            return l2.compareTo(l1);
         }
     }
 }
