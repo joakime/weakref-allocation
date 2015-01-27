@@ -1,6 +1,16 @@
+# Maven
+target/
+
+# Generic Temp Files
+*.swp
+*.log
+
+# Eclipse
 .project
 .classpath
 .settings/
-target/
-*.swp
-*.log
+
+# IntelliJ
+.attach*
+.idea*
+*.iml
