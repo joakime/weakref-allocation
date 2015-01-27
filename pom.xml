@@ -12,6 +12,15 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  
+  <licenses>
+    <license>
+      <name>GNU General Public License v2.0 w/Classpath exception</name>
+      <url>
+        http://openjdk.java.net/legal/gplv2+ce.html
+      </url>
+    </license>
+  </licenses>
 
   <build>
     <defaultGoal>install</defaultGoal>
@@ -53,10 +62,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <dependencyManagement>
-    <dependencies>
-    </dependencies>
-  </dependencyManagement>
 
 </project>

@@ -259,7 +259,7 @@ public class WeakReference<T> extends Reference<T> {
             {
                 return -1;
             }
-            int diff = l1.intValue() - l2.intValue();
+            int diff = l2.intValue() - l1.intValue();
             return diff;
         }
     }
