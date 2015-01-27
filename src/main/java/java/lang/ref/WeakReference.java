@@ -147,7 +147,10 @@ public class WeakReference<T> extends Reference<T> {
                 Long value = count == null ? 1L : count + 1;
                 weaks.put(key,value);
                 if (value % stackdumpInterval == 0)
+                {
+                    System.err.print("WeakReference.alloc dump: referent=" + key + " :: ");
                     Thread.dumpStack();
+                }
             }
         }
         
